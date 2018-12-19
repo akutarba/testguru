@@ -5,10 +5,18 @@ class Test < ApplicationRecord
   has_many :users, through: :test_passages
   has_many :test_passages
 
+  scope :by_level, ->(level) { where(level: level) }
+  scope :by_category, ->(title) { joins(:category).where(categories: { title: title }).order(title: :desc)
+  }
+  scope :easy, -> { where(level: 0..1) }
+  scope :normal, -> { where(level: 2..4) }
+  scope :hard, -> { where(level: 5..Float::INFINITY) }
+
+  validates :title, presence: true, uniqueness: { scope: :level }
+  validates :level, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
 
-  def self.get_titles(category_name)
-    Test.joins(' JOIN categories ON tests.category_id = categories.id').where('categories.title = ?', category_name)
-        .order(title: :desc).pluck(:title)
+  def self.get_titles_by_categories(category_name)
+    by_category(category_name).pluck(:title)
   end
 end
