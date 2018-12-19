@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(version: 2018_11_15_224744) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_tests", force: :cascade do |t|
+  create_table "test_passages", force: :cascade do |t|
     t.integer "user_id"
     t.integer "test_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["test_id"], name: "index_user_tests_on_test_id"
-    t.index ["user_id"], name: "index_user_tests_on_user_id"
+    t.index ["test_id", "user_id"], name: "index_test_passages_on_test_id_and_user_id"
+    # t.index ["user_id"], name: "index_test_passages_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
